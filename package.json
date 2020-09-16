@@ -1,0 +1,39 @@
+{
+  "name": "anestech",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:iredhd/anestech.git",
+  "author": "Ighor Redhd",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
+    "commitizen": "^4.2.1",
+    "cz-conventional-changelog": "3.3.0",
+    "husky": "^4.3.0",
+    "pretty": "^2.0.0",
+    "yarn-workspaces-foreach": "^0.2.0"
+  },
+  "workspaces": {
+    "packages": [
+      "backend"
+    ]
+  },
+  "scripts": {
+    "lint": "workspaces-foreach yarn lint",
+    "lint:ci": "workspaces-foreach yarn lint:ci",
+    "commit": "git-cz"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint:ci",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
