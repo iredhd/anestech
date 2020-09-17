@@ -19,5 +19,6 @@ const { Ignitor } = require('@adonisjs/ignitor');
 
 new Ignitor(require('@adonisjs/fold'))
   .appRoot(__dirname)
+  .preLoad('app/Validators/CustomRules')
   .fireHttpServer()
   .catch(console.error);

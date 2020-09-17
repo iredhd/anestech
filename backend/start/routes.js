@@ -12,6 +12,29 @@
 */
 
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
+
 const Route = use('Route');
 
-Route.get('/', () => ({ greeting: 'Hello world in JSON' }));
+Route.resource('users', 'UserController')
+  .validator(new Map([
+    [['users.store'], ['StoreUser']],
+    [['users.update'], ['UpdateUser']],
+  ]))
+  .apiOnly()
+  .middleware(new Map([
+    [['users.index'], ['auth']],
+    [['users.update'], ['auth']],
+    [['users.destroy'], ['auth']],
+    [['users.show'], ['auth']],
+  ]));
+
+Route.post('/sessions', 'SessionController.create').validator('AuthUser');
+
+Route.resource('tasks', 'TaskController')
+  .validator(new Map([
+    [['tasks.store'], ['StoreTask']],
+    [['tasks.update'], ['StoreTask']],
+    [['tasks.index'], ['FindTask']],
+  ]))
+  .apiOnly()
+  .middleware('auth');
