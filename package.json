@@ -1,5 +1,5 @@
 {
-  "name": "anestech",
+  "name": "iredhd-anestech",
   "version": "1.0.0",
   "main": "index.js",
   "repository": "git@github.com:iredhd/anestech.git",
@@ -17,7 +17,8 @@
   },
   "workspaces": {
     "packages": [
-      "backend"
+      "backend",
+      "frontend"
     ]
   },
   "scripts": {
