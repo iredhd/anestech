@@ -1,17 +1,21 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import {
   AppBar, Toolbar, IconButton, Typography, MenuItem, Menu,
+  Dialog, DialogActions, DialogContent, DialogContentText,
+  DialogTitle,
 } from '@material-ui/core';
 import {
   Menu as MenuIcon, AccountCircle, AssignmentTurnedIn as AssignmentTurnedInIcon,
   PeopleAlt as PeopleAltIcon,
 } from '@material-ui/icons';
 import { useLocation, Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import logoWhite from '../../assets/logo_white.png';
 import useStyles from './styles';
+import Button from '../Button';
+import { logout } from '../../store/actions/auth';
 
 const MENU_OPTIONS = [
   {
@@ -32,10 +36,12 @@ const Template = ({ children }) => {
   const classes = useStyles();
   const { pathname } = useLocation();
 
+  const [isOpenLogoutModal, setIsOpenLogoutModal] = useState(false);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [profileMenuAnchorEl, setProfileMenuAnchorEl] = useState(null);
   const [menuOptions, setMenuOptions] = useState(MENU_OPTIONS);
   const userName = useSelector(({ user }) => user.name);
+  const dispatch = useDispatch();
 
   const isProfileMenuOpen = Boolean(profileMenuAnchorEl);
   const isMenuOpen = Boolean(menuAnchorEl);
@@ -56,6 +62,14 @@ const Template = ({ children }) => {
     setMenuAnchorEl(null);
   }, []);
 
+  const handleToggleLogoutModal = useCallback(() => {
+    setIsOpenLogoutModal(!isOpenLogoutModal);
+  }, [isOpenLogoutModal]);
+
+  const handleLogout = useCallback(() => {
+    dispatch(logout());
+  }, [dispatch]);
+
   const profileMenuId = 'profile-menu';
   const renderProfileMenu = (
     <Menu
@@ -68,7 +82,7 @@ const Template = ({ children }) => {
       onClose={handleProfileMenuClose}
     >
       <MenuItem onClick={handleProfileMenuClose}>Minha conta</MenuItem>
-      <MenuItem onClick={handleProfileMenuClose}>Sair</MenuItem>
+      <MenuItem onClick={handleToggleLogoutModal}>Sair</MenuItem>
     </Menu>
   );
 
@@ -149,6 +163,22 @@ const Template = ({ children }) => {
       <div className={classes.root}>
         {children}
       </div>
+      <Dialog
+        open={isOpenLogoutModal}
+        onClose={handleToggleLogoutModal}
+      >
+        <DialogTitle id="alert-dialog-title">Atenção!</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Deseja mesmo sair do sistema?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleLogout} color="primary" autoFocus>
+            Sim
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

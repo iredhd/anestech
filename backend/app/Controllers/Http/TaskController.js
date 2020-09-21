@@ -9,7 +9,7 @@ const moment = use('moment');
 class TaskController {
   async index({ request }) {
     const {
-      description, datetimeStart, datetimeEnd, userId, page = 1
+      description, datetimeStart, datetimeEnd, userId, page = 1,
     } = request.all();
 
     const query = Database
