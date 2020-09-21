@@ -10,7 +10,6 @@ import {
 import useStyles from './styles';
 import logoColor from '../../assets/logo_color.png';
 import { EMAIL_IS_REQUIRED, PASSWORD_MIN_LENGTH, PASSWORD_IS_REQUIRED } from '../../constants/validations';
-// import API from '../../API';
 import { Auth } from '../../services';
 import { storeToken } from '../../store/actions/auth';
 import { storeData } from '../../store/actions/user';
@@ -55,7 +54,7 @@ const Login = () => {
         }
       }
     }
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className={classes.root}>
