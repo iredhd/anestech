@@ -4,6 +4,7 @@ import Button from './Button';
 import Link from './Link';
 import Template from './Template';
 import DatePicker from './DatePicker';
+import Autocomplete from './Autocomplete';
 
 export {
   Section,
@@ -12,4 +13,5 @@ export {
   Link,
   Template,
   DatePicker,
+  Autocomplete,
 };

@@ -16,7 +16,7 @@ import useStyles from './styles';
 const MENU_OPTIONS = [
   {
     label: 'Tarefas',
-    path: '/home',
+    path: '/tarefas',
     disabled: false,
     Icon: AssignmentTurnedInIcon,
   },
@@ -85,9 +85,12 @@ const Template = ({ children }) => {
     >
       {
             menuOptions.map((option, index) => (
-              <Link to={option.path} className={classes.menuLink}>
+              <Link
+                to={option.path}
+                className={classes.menuLink}
+                key={index.toString()}
+              >
                 <MenuItem
-                  key={index.toString()}
                   disabled={option.disabled}
                   data-path={option.path}
                 >

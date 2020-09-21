@@ -24,7 +24,7 @@ const PublicRoute = (props) => {
         Auth.setToken(auth.token);
       }
 
-      history.push('/home');
+      history.push('/tarefas');
     } else {
       handleLogout();
     }

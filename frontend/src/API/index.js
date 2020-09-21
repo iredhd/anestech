@@ -11,4 +11,7 @@ if (token) {
   instance.defaults.headers.common.Authorization = `Bearer ${token}`;
 }
 
-export default instance;
+export default {
+  get: (route, params = {}) => instance.get(route, { params }),
+  post: (route, body = {}) => instance.post(route, body),
+};

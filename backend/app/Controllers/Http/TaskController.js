@@ -9,11 +9,14 @@ const moment = use('moment');
 class TaskController {
   async index({ request }) {
     const {
-      description, datetimeStart, datetimeEnd, userId,
+      description, datetimeStart, datetimeEnd, userId, page = 1
     } = request.all();
 
     const query = Database
-      .from('tasks');
+      .select('tasks.*')
+      .select('users.name', 'name')
+      .from('tasks')
+      .innerJoin('users', 'users.id', 'tasks.userId');
 
     if (userId) {
       query.where('userId', userId);
@@ -38,7 +41,7 @@ class TaskController {
     }
 
     return query
-      .paginate(1, 10);
+      .paginate(page, 10);
   }
 
   async store({ request }) {

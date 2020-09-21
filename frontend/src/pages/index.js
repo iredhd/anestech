@@ -1,9 +1,9 @@
 import Login from './Login';
 import Register from './Register';
-import Home from './Home';
+import Tasks from './Tasks';
 
 export {
   Login,
   Register,
-  Home,
+  Tasks,
 };
