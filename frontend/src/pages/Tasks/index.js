@@ -42,10 +42,6 @@ const Home = () => {
     loadTasks(filters);
   }, [filters]);
 
-  useEffect(() => {
-    loadTasks();
-  }, [loadTasks]);
-
   return (
     <Template>
       <SearchSection
