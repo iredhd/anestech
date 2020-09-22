@@ -2,13 +2,13 @@ import React, {
   useCallback,
 } from 'react';
 import {
-  KeyboardDatePicker,
+  KeyboardDateTimePicker,
 } from '@material-ui/pickers';
 import PropTypes from 'prop-types';
 
-import { DATE_FORMAT } from '../../constants/format';
+import { DATETIME_FORMAT } from '../../constants/format';
 
-const DatePicker = ({
+const DateTimePicker = ({
   label, value, error, name, onChange,
 }) => {
   const handleDateChange = useCallback((date) => {
@@ -16,7 +16,7 @@ const DatePicker = ({
   }, []);
 
   return (
-    <KeyboardDatePicker
+    <KeyboardDateTimePicker
       error={!!error}
       helperText={error}
       value={value ? new Date(value) : null}
@@ -24,18 +24,18 @@ const DatePicker = ({
       inputVariant="outlined"
       fullWidth
       label={label}
-      format={DATE_FORMAT}
+      format={DATETIME_FORMAT}
       allowKeyboardControl={false}
     />
   );
 };
 
-DatePicker.defaultProps = {
+DateTimePicker.defaultProps = {
   error: false,
   value: '',
 };
 
-DatePicker.propTypes = {
+DateTimePicker.propTypes = {
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   value: PropTypes.string,
@@ -43,4 +43,4 @@ DatePicker.propTypes = {
   error: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
 };
 
-export default DatePicker;
+export default DateTimePicker;

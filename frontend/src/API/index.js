@@ -14,4 +14,6 @@ if (token) {
 export default {
   get: (route, params = {}) => instance.get(route, { params }),
   post: (route, body = {}) => instance.post(route, body),
+  delete: (route, body = {}) => instance.delete(route, body),
+  put: (route, body = {}) => instance.put(route, body),
 };

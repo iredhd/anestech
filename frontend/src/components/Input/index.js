@@ -1,37 +1,25 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
-import { useField } from '@unform/core';
 
-const Input = ({ name, ...rest }) => {
-  const inputRef = useRef(null);
+const Input = ({ name, error, ...rest }) => (
+  <TextField
+    name={name}
+    variant="outlined"
+    error={!!error}
+    fullWidth
+    helperText={error}
+    {...rest}
+  />
+);
 
-  const {
-    fieldName, registerField, error,
-  } = useField(name);
-
-  useEffect(() => {
-    registerField({
-      name: fieldName,
-      ref: inputRef.current,
-      path: 'value',
-    });
-  }, [fieldName, registerField]);
-
-  return (
-    <TextField
-      inputRef={inputRef}
-      variant="outlined"
-      error={!!error}
-      fullWidth
-      helperText={error}
-      {...rest}
-    />
-  );
+Input.defaultProps = {
+  error: false,
 };
 
 Input.propTypes = {
   name: PropTypes.string.isRequired,
+  error: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
 };
 
 export default Input;

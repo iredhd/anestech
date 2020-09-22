@@ -3,7 +3,7 @@ class StoreTask {
     return {
       description: 'required',
       datetimeStart: 'required|check_datetime_format',
-      datetimeEnd: 'required|check_datetime_format',
+      datetimeEnd: 'check_datetime_format',
       userId: 'required|exists:users,id',
     };
   }

@@ -1,9 +1,9 @@
-import React, { useCallback, useRef } from 'react';
-import { Form } from '@unform/web';
+import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 
+import { useFormik } from 'formik';
 import {
   Section, Input, Button, Link,
 } from '../../components';
@@ -16,22 +16,23 @@ import { storeData } from '../../store/actions/user';
 
 const Login = () => {
   const classes = useStyles();
-  const formRef = useRef(null);
   const dispatch = useDispatch();
 
-  const handleSubmit = useCallback(async (data) => {
-    try {
-      formRef.current.setErrors({});
-      const schema = Yup.object().shape({
-        email: Yup.string().email().required(EMAIL_IS_REQUIRED),
-        password: Yup.string().min(6, PASSWORD_MIN_LENGTH).required(PASSWORD_IS_REQUIRED),
-      });
+  const initialValues = {
+    email: '',
+    password: '',
+  };
 
-      await schema.validate(data, {
-        abortEarly: false,
-      });
-
-      const login = await Auth.login(data);
+  const {
+    values, errors, touched, handleSubmit, handleChange,
+  } = useFormik({
+    initialValues,
+    validationSchema: Yup.object().shape({
+      email: Yup.string().email().required(EMAIL_IS_REQUIRED),
+      password: Yup.string().min(6, PASSWORD_MIN_LENGTH).required(PASSWORD_IS_REQUIRED),
+    }),
+    onSubmit: async (formValues) => {
+      const login = await Auth.login(formValues);
 
       if (!login.success) {
         return console.error('error on auth');
@@ -41,27 +42,15 @@ const Login = () => {
 
       dispatch(storeToken(token));
       dispatch(storeData(user));
-    } catch (err) {
-      if (err instanceof Yup.ValidationError) {
-        const validationErrors = {};
-
-        if (err instanceof Yup.ValidationError) {
-          err.inner.forEach((error) => {
-            validationErrors[error.path] = error.message;
-          });
-
-          formRef.current.setErrors(validationErrors);
-        }
-      }
-    }
-  }, [dispatch]);
+    },
+  });
 
   return (
     <div className={classes.root}>
       <Grid container spacing={3} justify="center" align="center">
         <Grid item xs={6} md={4}>
           <Section>
-            <Form ref={formRef} onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit}>
               <Grid container spacing={1}>
                 <Grid item xs={12}>
                   <img src={logoColor} alt="Anestech Logo" />
@@ -71,6 +60,9 @@ const Login = () => {
                     name="email"
                     label="E-mail"
                     type="email"
+                    error={touched.email && errors.email}
+                    value={values.email}
+                    onChange={handleChange}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -78,6 +70,9 @@ const Login = () => {
                     name="password"
                     label="Senha"
                     type="password"
+                    error={touched.password && errors.password}
+                    value={values.password}
+                    onChange={handleChange}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -94,7 +89,7 @@ const Login = () => {
                   </Link>
                 </Grid>
               </Grid>
-            </Form>
+            </form>
           </Section>
         </Grid>
       </Grid>

@@ -3,7 +3,7 @@ const Model = use('Model');
 
 class Task extends Model {
   user() {
-    return this.belongsTo('App/Models/User');
+    return this.belongsTo('App/Models/User', 'userId', 'id');
   }
 }
 

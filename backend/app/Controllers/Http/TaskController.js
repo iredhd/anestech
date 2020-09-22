@@ -53,7 +53,10 @@ class TaskController {
   async show({
     params,
   }) {
-    return Task.findOrFail(params.id);
+    const task = await Task.findOrFail(params.id);
+    await task.load('user')
+
+    return task
   }
 
   async update({ request, params }) {

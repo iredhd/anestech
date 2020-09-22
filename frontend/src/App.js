@@ -7,8 +7,10 @@ import { PersistGate } from 'redux-persist/integration/react';
 import {
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
-import 'date-fns';
+// import DateFnsUtils from '@date-io/date-fns';
+import MomentUtils from '@date-io/moment';
+import 'moment';
+// import 'date-fns';
 
 import Routes from './routes';
 import theme from './styles/theme';
@@ -19,7 +21,7 @@ const App = () => (
     <PersistGate loading={null} persistor={persistor}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <MuiPickersUtilsProvider utils={MomentUtils}>
           <Router>
             <Routes />
           </Router>

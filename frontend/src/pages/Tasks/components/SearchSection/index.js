@@ -1,21 +1,22 @@
 import React, {
-  useCallback, useEffect, useRef, useState,
+  useCallback, useEffect, useState,
 } from 'react';
-import { Form } from '@unform/web';
 import { Search, ExpandMore as ExpandMoreIcon } from '@material-ui/icons';
 import { Collapse, IconButton, Grid } from '@material-ui/core';
 import classnames from 'classnames';
 import { get } from 'lodash';
 import PropTypes from 'prop-types';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import moment from 'moment';
 
 import {
-  Input, Section, Button, Autocomplete,
+  Input, Section, Button, Autocomplete, DatePicker,
 } from '../../../../components';
 import useStyles from './styles';
 import { User } from '../../../../services';
 
 const SearchSection = ({ onSubmit }) => {
-  const formRef = useRef(null);
   const classes = useStyles();
   const [isExpanded, setIsExpanded] = useState(false);
   const [users, setUsers] = useState({
@@ -23,9 +24,25 @@ const SearchSection = ({ onSubmit }) => {
     debounce: null,
   });
 
-  const handleSubmit = useCallback((data) => {
-    onSubmit(data);
-  }, []);
+  const initialValues = {
+    userId: '',
+    datetimeStart: '',
+    datetimeEnd: '',
+    description: '',
+  };
+
+  const {
+    values, errors, touched, setFieldValue, handleSubmit, handleChange,
+  } = useFormik({
+    initialValues,
+    validationSchema: Yup.object().shape({
+      userId: Yup.number().nullable(),
+      datetimeStart: Yup.date().nullable(),
+      datetimeEnd: Yup.date().nullable(),
+      description: Yup.string().nullable(),
+    }),
+    onSubmit,
+  });
 
   const handleToggleExpand = useCallback(() => {
     setIsExpanded(!isExpanded);
@@ -56,9 +73,8 @@ const SearchSection = ({ onSubmit }) => {
   }, [users]);
 
   const handleUserChange = useCallback((value) => {
-    console.log(get(value, 'id', null));
-    formRef.current.setFieldValue('userId', get(value, 'id', null));
-  }, [formRef]);
+    setFieldValue('userId', get(value, 'id', null));
+  }, [setFieldValue]);
 
   const handleUserTextChange = useCallback(({ target: { value } }) => {
     if (users.debounce) {
@@ -70,6 +86,10 @@ const SearchSection = ({ onSubmit }) => {
       debounce: setTimeout(() => loadUsers({ name: value }), 700),
     });
   }, [users]);
+
+  const handleDateChange = useCallback(({ name, value }) => {
+    setFieldValue(name, moment(value).isValid() ? moment(value).toDate() : null);
+  }, [setFieldValue]);
 
   useEffect(() => {
     loadUsers();
@@ -89,25 +109,45 @@ const SearchSection = ({ onSubmit }) => {
         </IconButton>
       </div>
       <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-        <Form ref={formRef} onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={4}>
               <Autocomplete
                 name="userId"
-                label="Usuário"
+                label="Responsável"
                 options={users.options}
                 onChange={handleUserChange}
                 onTextChange={handleUserTextChange}
+                error={touched.userId && errors.userId}
+                value={values.userId}
               />
             </Grid>
             <Grid item xs={12} sm={4}>
-              <Input name="datetimeStart" disabled label="Data de início" />
+              <DatePicker
+                name="datetimeStart"
+                label="Data de início"
+                onChange={handleDateChange}
+                error={touched.datetimeStart && errors.datetimeStart}
+                value={values.datetimeStart}
+              />
             </Grid>
             <Grid item xs={12} sm={4}>
-              <Input name="datetimeEnd" disabled label="Data de término" />
+              <DatePicker
+                name="datetimeEnd"
+                label="Data de término"
+                onChange={handleDateChange}
+                error={touched.datetimeEnd && errors.datetimeEnd}
+                value={values.datetimeEnd}
+              />
             </Grid>
             <Grid item xs={12} sm={8}>
-              <Input name="description" label="Descrição" />
+              <Input
+                name="description"
+                label="Descrição"
+                onChange={handleChange}
+                error={touched.description && errors.description}
+                value={values.description}
+              />
             </Grid>
             <Grid item xs={12} sm={4} className={classes.submitContainer}>
               <Button
@@ -119,7 +159,7 @@ const SearchSection = ({ onSubmit }) => {
               </Button>
             </Grid>
           </Grid>
-        </Form>
+        </form>
       </Collapse>
     </Section>
   );

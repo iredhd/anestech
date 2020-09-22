@@ -1,36 +1,23 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback } from 'react';
 import TextField from '@material-ui/core/TextField';
 import MuiAutocomplete from '@material-ui/lab/Autocomplete';
-import { useField } from '@unform/core';
 import PropTypes from 'prop-types';
+import { find } from 'lodash';
 
 const Autocomplete = ({
-  label, name, id, options, onChange, onTextChange,
+  label, error, id: elementId, options, onChange, onTextChange, value,
 }) => {
-  const inputRef = useRef(null);
-  const {
-    fieldName, registerField, error,
-  } = useField(name);
-
   const handleChange = useCallback((_, option) => {
     onChange(option);
   }, [onChange]);
 
-  useEffect(() => {
-    registerField({
-      name,
-      ref: inputRef.current,
-      path: 'value',
-    });
-  }, [fieldName, registerField, name]);
-
   return (
     <MuiAutocomplete
-      id={id}
-      ref={inputRef}
+      id={elementId}
       options={options}
-      getOptionLabel={(option) => option.label}
       clearOnBlur
+      value={find(options, ({ id }) => id === value) || null}
+      getOptionLabel={(option) => option.label}
       onChange={handleChange}
       noOptionsText="Nenhuma opção encontrada."
       renderInput={(params) => (
@@ -51,6 +38,8 @@ const Autocomplete = ({
 Autocomplete.defaultProps = {
   onTextChange: () => {},
   id: '',
+  error: false,
+  value: '',
 };
 
 Autocomplete.propTypes = {
@@ -62,6 +51,8 @@ Autocomplete.propTypes = {
   })).isRequired,
   onChange: PropTypes.func.isRequired,
   onTextChange: PropTypes.func,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  error: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
 };
 
 export default Autocomplete;
