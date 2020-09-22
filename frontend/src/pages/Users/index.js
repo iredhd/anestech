@@ -2,16 +2,16 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import { Template } from '../../components';
 import { SearchSection, ListSection } from './components';
-import { Notify, Task } from '../../services';
+import { Notify, User } from '../../services';
 
-const Tasks = () => {
+const Users = () => {
   const [tableData, setTableData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [filters, setFilters] = useState({});
 
-  const loadTasks = useCallback(async (params) => {
+  const loadData = useCallback(async (params) => {
     setIsLoading(true);
-    const { success, body } = await Task.getList(params);
+    const { success, body } = await User.getList(params);
 
     if (success) {
       setTableData(body);
@@ -24,10 +24,12 @@ const Tasks = () => {
   }, []);
 
   const handleSearchSubmit = useCallback(({
-    userId = '', datetimeStart = '', datetimeEnd = '', description = '',
+    name = '',
+    email = '',
   } = {}) => {
     setFilters({
-      userId, datetimeStart, datetimeEnd, description,
+      name,
+      email,
     });
   }, []);
 
@@ -39,7 +41,7 @@ const Tasks = () => {
   }, [filters]);
 
   useEffect(() => {
-    loadTasks(filters);
+    loadData(filters);
   }, [filters]);
 
   return (
@@ -56,4 +58,4 @@ const Tasks = () => {
   );
 };
 
-export default Tasks;
+export default Users;

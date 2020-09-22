@@ -71,7 +71,7 @@ const Task = {
 
       return {
         success: true,
-        body: data.id,
+        body: data,
       };
     } catch (e) {
       return {

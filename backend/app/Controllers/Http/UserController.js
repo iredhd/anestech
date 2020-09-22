@@ -1,7 +1,8 @@
 const User = use('App/Models/User');
 const Database = use('Database');
-const { USER_UPDATE_NOT_ALLOWED, USER_EMAIL_ALREADY_IN_USE, USER_DELETE_NOT_ALLOWED } = use('App/Constants/Errors');
+const { USER_EMAIL_ALREADY_IN_USE, USER_NOT_FOUND } = use('App/Constants/Errors');
 const { error } = use('App/Helpers/Responses');
+const { NOT_FOUND } = use('http-status-codes');
 
 class UserController {
   async store({ request, response }) {
@@ -20,7 +21,7 @@ class UserController {
 
   async index({ request }) {
     const {
-      name,
+      name, email,
     } = request.all();
 
     const query = Database
@@ -30,23 +31,36 @@ class UserController {
       query.where('name', 'like', `%${name}%`);
     }
 
+    if (email) {
+      query.where('email', 'like', `%${email}%`);
+    }
+
     return query
       .paginate(1, 10);
   }
 
   async show({
     params,
+    response,
   }) {
-    return User.findOrFail(params.id);
+    const user = await User.find(params.id);
+
+    if (!user) {
+      return error({ response, code: NOT_FOUND, error: USER_NOT_FOUND });
+    }
+
+    return user;
   }
 
   async update({
-    request, params, auth, response,
+    request, params, response,
   }) {
     const { password, ...data } = request.only(['name', 'email', 'password']);
 
-    if (Number(auth.user.id) !== Number(params.id)) {
-      return error({ response, error: USER_UPDATE_NOT_ALLOWED });
+    const user = await User.find(params.id);
+
+    if (!user) {
+      return error({ response, code: NOT_FOUND, error: USER_NOT_FOUND });
     }
 
     const diferentUser = await User
@@ -59,8 +73,6 @@ class UserController {
       return error({ response, error: USER_EMAIL_ALREADY_IN_USE });
     }
 
-    const user = await User.findOrFail(params.id);
-
     if (password) {
       data.password = password;
     }
@@ -72,12 +84,12 @@ class UserController {
     return user;
   }
 
-  async destroy({ params, response, auth }) {
-    if (Number(auth.user.id) !== Number(params.id)) {
-      return error({ response, error: USER_DELETE_NOT_ALLOWED });
-    }
+  async destroy({ params, response }) {
+    const user = await User.find(params.id);
 
-    const user = await User.findOrFail(params.id);
+    if (!user) {
+      return error({ response, code: NOT_FOUND, error: USER_NOT_FOUND });
+    }
 
     return user.delete();
   }

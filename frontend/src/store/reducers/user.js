@@ -3,6 +3,7 @@ import { ActionTypes } from '../actions';
 const initialState = {
   name: null,
   email: null,
+  id: null,
 };
 
 const reducer = (state = initialState, action) => {
@@ -12,6 +13,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         name: action.payload.name,
         email: action.payload.email,
+        id: action.payload.id,
       };
     case ActionTypes.USER_CLEAR_DATA:
       return {

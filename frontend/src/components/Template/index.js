@@ -41,6 +41,7 @@ const Template = ({ children }) => {
   const [profileMenuAnchorEl, setProfileMenuAnchorEl] = useState(null);
   const [menuOptions, setMenuOptions] = useState(MENU_OPTIONS);
   const userName = useSelector(({ user }) => user.name);
+  const userId = useSelector(({ user }) => user.id);
   const dispatch = useDispatch();
 
   const isProfileMenuOpen = Boolean(profileMenuAnchorEl);
@@ -81,7 +82,12 @@ const Template = ({ children }) => {
       open={isProfileMenuOpen}
       onClose={handleProfileMenuClose}
     >
-      <MenuItem onClick={handleProfileMenuClose}>Minha conta</MenuItem>
+      <Link
+        to={`/usuarios/ver/${userId}`}
+        className={classes.menuLink}
+      >
+        <MenuItem>Minha conta</MenuItem>
+      </Link>
       <MenuItem onClick={handleToggleLogoutModal}>Sair</MenuItem>
     </Menu>
   );

@@ -12,6 +12,10 @@ module.exports = {
     code: 102,
     message: 'Este e-mail já está sendo utilizado por outro usuário.',
   },
+  USER_NOT_FOUND: {
+    code: 103,
+    message: 'Usuário não encontrado.',
+  },
 
   // TASK
   TASK_NOT_FOUND: {

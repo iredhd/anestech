@@ -1,10 +1,11 @@
 import { ActionTypes } from '.';
 
-export const storeData = ({ name, email }) => ({
+export const storeData = ({ name, email, id }) => ({
   type: ActionTypes.USER_STORE_DATA,
   payload: {
     name,
     email,
+    id,
   },
 });
 
