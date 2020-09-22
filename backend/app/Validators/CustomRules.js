@@ -26,7 +26,7 @@ const checkDatetimeFormat = async (data, field, message, args, get) => {
     return;
   }
 
-  const valid = moment(value, 'YYYY-MM-DD HH:mm:ss', true);
+  const valid = moment(value);
 
   if (valid.isValid() === false) {
     throw message;

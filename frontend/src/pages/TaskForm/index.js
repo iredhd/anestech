@@ -18,7 +18,6 @@ import {
   TASK_DESCRIPTION_IS_REQUIRED, DATETIME_INVALID,
 } from '../../constants/validations';
 import useStyles from './styles';
-import { API_DATETIME_FORMAT } from '../../constants/format';
 
 const TaskForm = () => {
   const classes = useStyles();
@@ -56,10 +55,10 @@ const TaskForm = () => {
       const { datetimeEnd, ...payload } = formValues;
 
       if (moment(datetimeEnd).isValid()) {
-        payload.datetimeEnd = moment(datetimeEnd).format(API_DATETIME_FORMAT);
+        payload.datetimeEnd = moment(datetimeEnd).toDate();
       }
 
-      payload.datetimeStart = moment(payload.datetimeStart).format(API_DATETIME_FORMAT);
+      payload.datetimeStart = moment(payload.datetimeStart).toDate();
 
       if (isCreate) {
         const { success, body } = await TaskService.create(payload);
