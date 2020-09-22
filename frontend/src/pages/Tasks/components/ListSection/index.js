@@ -51,7 +51,11 @@ const ListSection = ({
                   <TableCell component="th" scope="row">
                     {row.id}
                   </TableCell>
-                  <TableCell>{row.description}</TableCell>
+                  <TableCell>
+                    <div className={classes.descriptionCell}>
+                      {row.description}
+                    </div>
+                  </TableCell>
                   <TableCell>{row.name}</TableCell>
                   <TableCell>{moment(row.datetimeStart).format(DATETIME_FORMAT)}</TableCell>
                   <TableCell>{row.datetimeEnd ? moment(row.datetimeEnd).format(DATETIME_FORMAT) : '-'}</TableCell>

@@ -43,6 +43,10 @@ class TaskController {
       query.where('description', 'like', `%${description}%`);
     }
 
+    if (!description && !datetimeEnd && !userId && !datetimeStart) {
+      query.whereNull('datetimeEnd');
+    }
+
     return query
       .paginate(page, 10);
   }
