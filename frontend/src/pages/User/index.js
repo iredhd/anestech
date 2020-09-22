@@ -63,7 +63,11 @@ const User = () => {
               <Typography variant="subtitle2">Atualizado em:</Typography>
               <Typography variant="body1">{moment(user.updated_at).format(DATETIME_FORMAT)}</Typography>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6} md={3}>
+              <Typography variant="subtitle2">Tarefas:</Typography>
+              <Typography variant="body1">{get(user, 'tasks', []).length}</Typography>
+            </Grid>
+            <Grid item xs={12} sm={6} md={9}>
               <Grid container spacing={2} justify="flex-end" direction="row">
                 <Grid item>
                   <Link to={`/usuarios/editar/${user.id}`}>

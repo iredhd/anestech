@@ -49,6 +49,8 @@ class UserController {
       return error({ response, code: NOT_FOUND, error: USER_NOT_FOUND });
     }
 
+    await user.load('tasks');
+
     return user;
   }
 
