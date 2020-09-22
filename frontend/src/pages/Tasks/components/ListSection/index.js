@@ -41,7 +41,7 @@ const ListSection = ({
               <TableCell>Responsável</TableCell>
               <TableCell>Início</TableCell>
               <TableCell>Término</TableCell>
-              <TableCell align="right">Ações</TableCell>
+              <TableCell align="right">Detalhes</TableCell>
             </TableRow>
           </TableHead>
           {items.length ? (

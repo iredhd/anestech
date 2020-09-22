@@ -2,17 +2,18 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
-
 import { useFormik } from 'formik';
+
 import {
   Section, Input, Button, Link,
 } from '../../components';
 import useStyles from './styles';
 import logoColor from '../../assets/logo_color.png';
 import { EMAIL_IS_REQUIRED, PASSWORD_MIN_LENGTH, PASSWORD_IS_REQUIRED } from '../../constants/validations';
-import { Auth } from '../../services';
+import { Auth, Notify } from '../../services';
 import { storeToken } from '../../store/actions/auth';
 import { storeData } from '../../store/actions/user';
+import { USER_OR_PASSWORD_IS_INVALID } from '../../constants/API';
 
 const Login = () => {
   const classes = useStyles();
@@ -35,7 +36,7 @@ const Login = () => {
       const login = await Auth.login(formValues);
 
       if (!login.success) {
-        return console.error('error on auth');
+        return Notify.error(USER_OR_PASSWORD_IS_INVALID);
       }
 
       const { token, user } = login.body;

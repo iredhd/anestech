@@ -14,8 +14,9 @@ import {
   PASSWORD_CONFIRM_DOESNT_MATCH, PASSWORD_CONFIRM_IS_REQUIRED, EMAIL_INVALID,
 } from '../../constants/validations';
 import { storeToken } from '../../store/actions/auth';
-import { Auth } from '../../services';
+import { Auth, Notify } from '../../services';
 import { storeData } from '../../store/actions/user';
+import { INTERNAL_ERROR } from '../../constants/API';
 
 const Register = () => {
   const classes = useStyles();
@@ -44,20 +45,20 @@ const Register = () => {
       const register = await Auth.register(formValues);
 
       if (!register.success) {
-        return console.error('error on register');
+        return Notify.error(register.body);
       }
 
       const login = await Auth.login(formValues);
 
       if (!login.success) {
-        return console.error('error on auth');
+        return Notify.error(INTERNAL_ERROR);
       }
 
       dispatch(storeToken(login.body.token));
       dispatch(storeData(login.body.user));
     },
   });
-  console.log(errors, touched);
+
   return (
     <div className={classes.root}>
       <Grid container spacing={3} justify="center" align="center">

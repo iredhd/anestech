@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import { Template } from '../../components';
 import { SearchSection, ListSection } from './components';
-import { Task } from '../../services';
+import { Notify, Task } from '../../services';
 
 const Home = () => {
   const [tableData, setTableData] = useState({});
@@ -16,6 +16,7 @@ const Home = () => {
     if (success) {
       setTableData(body);
     } else {
+      Notify.error(body);
       setTableData({});
     }
 

@@ -7,10 +7,9 @@ import { PersistGate } from 'redux-persist/integration/react';
 import {
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
-// import DateFnsUtils from '@date-io/date-fns';
 import MomentUtils from '@date-io/moment';
 import 'moment';
-// import 'date-fns';
+import 'toastr/build/toastr.css';
 
 import Routes from './routes';
 import theme from './styles/theme';

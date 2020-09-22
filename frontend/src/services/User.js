@@ -1,4 +1,5 @@
 import API from '../API';
+import { catchAPIError } from '../helpers/errors';
 
 const User = {
   getList: async (params = {}) => {
@@ -14,9 +15,9 @@ const User = {
         },
       };
     } catch (e) {
-      console.error(e);
       return {
         success: false,
+        body: catchAPIError(e),
       };
     }
   },

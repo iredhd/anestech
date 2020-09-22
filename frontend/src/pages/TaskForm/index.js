@@ -12,7 +12,7 @@ import { Add, Edit } from '@material-ui/icons';
 import {
   Section, Template, Button, LoadingWrapper, Autocomplete, Input, DateTimePicker,
 } from '../../components';
-import { Task as TaskService, User } from '../../services';
+import { Notify, Task as TaskService, User } from '../../services';
 import {
   TASK_DATETIME_START_IS_REQUIRED, TASK_OWNER_ID_IS_REQUIRED,
   TASK_DESCRIPTION_IS_REQUIRED, DATETIME_INVALID,
@@ -62,15 +62,19 @@ const TaskForm = () => {
       payload.datetimeStart = moment(payload.datetimeStart).format(API_DATETIME_FORMAT);
 
       if (isCreate) {
-        const { success } = await TaskService.create(payload);
+        const { success, body } = await TaskService.create(payload);
 
         if (success) {
           history.push('/tarefas');
+        } else {
+          Notify.error(body);
         }
       } else {
-        const { success } = await TaskService.update(id, payload);
+        const { success, body } = await TaskService.update(id, payload);
         if (success) {
           history.goBack();
+        } else {
+          Notify.error(body);
         }
       }
 
@@ -90,6 +94,7 @@ const TaskForm = () => {
         description: body.description,
       });
     } else {
+      Notify.error(body);
       setValues({ });
     }
 

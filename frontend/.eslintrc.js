@@ -20,6 +20,6 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'react/jsx-props-no-spreading': 'off',
     'import/no-cycle': 'off',
-    'consistent-return': 'off'
+    'consistent-return': 'off',
   },
 };

@@ -1,4 +1,6 @@
+import { get } from 'lodash';
 import API from '../API';
+import { INTERNAL_ERROR } from '../constants/API';
 import { LOCALSTORAGE_TOKEN_KEY } from '../constants/storage';
 
 const Auth = {
@@ -14,9 +16,9 @@ const Auth = {
         success: true,
       };
     } catch (e) {
-      console.error(e);
       return {
         success: false,
+        body: get(e, 'response.data.error.message', INTERNAL_ERROR),
       };
     }
   },
@@ -37,7 +39,6 @@ const Auth = {
         },
       };
     } catch (e) {
-      console.error(e);
       return {
         success: false,
       };

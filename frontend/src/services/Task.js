@@ -1,4 +1,5 @@
 import API from '../API';
+import { catchAPIError } from '../helpers/errors';
 
 const Task = {
   getList: async (params = {}) => {
@@ -14,9 +15,9 @@ const Task = {
         },
       };
     } catch (e) {
-      console.error(e);
       return {
         success: false,
+        body: catchAPIError(e),
       };
     }
   },
@@ -29,9 +30,9 @@ const Task = {
         body: data,
       };
     } catch (e) {
-      console.error(e);
       return {
         success: false,
+        body: catchAPIError(e),
       };
     }
   },
@@ -43,9 +44,9 @@ const Task = {
         success: true,
       };
     } catch (e) {
-      console.error(e);
       return {
         success: false,
+        body: catchAPIError(e),
       };
     }
   },
@@ -58,9 +59,9 @@ const Task = {
         body: data.id,
       };
     } catch (e) {
-      console.error(e);
       return {
         success: false,
+        body: catchAPIError(e),
       };
     }
   },
@@ -73,9 +74,9 @@ const Task = {
         body: data.id,
       };
     } catch (e) {
-      console.error(e);
       return {
         success: false,
+        body: catchAPIError(e),
       };
     }
   },

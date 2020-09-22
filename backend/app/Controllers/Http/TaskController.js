@@ -5,6 +5,9 @@
 const Task = use('App/Models/Task');
 const Database = use('Database');
 const moment = use('moment');
+const { NOT_FOUND } = use('http-status-codes');
+const { TASK_NOT_FOUND, TASK_DATETIME_END_BEFORE_START } = use('App/Constants/Errors');
+const { error } = use('App/Helpers/Responses');
 
 class TaskController {
   async index({ request }) {
@@ -44,35 +47,69 @@ class TaskController {
       .paginate(page, 10);
   }
 
-  async store({ request }) {
-    const data = request.only(['description', 'datetimeStart', 'datetimeEnd', 'userId']);
+  async store({ request, response }) {
+    const {
+      description, datetimeStart, datetimeEnd = null, userId,
+    } = request.all();
 
-    return Task.create(data);
+    if (datetimeEnd) {
+      if (moment(datetimeEnd).isBefore(datetimeStart)) {
+        return error({ response, error: TASK_DATETIME_END_BEFORE_START });
+      }
+    }
+
+    return Task.create({
+      description, datetimeStart, datetimeEnd, userId,
+    });
   }
 
   async show({
     params,
+    response,
   }) {
-    const task = await Task.findOrFail(params.id);
-    await task.load('user')
+    const task = await Task.find(params.id);
 
-    return task
-  }
+    if (!task) {
+      return error({ response, code: NOT_FOUND, error: TASK_NOT_FOUND });
+    }
 
-  async update({ request, params }) {
-    const data = request.only(['description', 'datetimeStart', 'datetimeEnd']);
-
-    const task = await Task.findOrFail(params.id);
-
-    task.merge(data);
-
-    await task.save();
+    await task.load('user');
 
     return task;
   }
 
-  async destroy({ params }) {
-    const task = await Task.findOrFail(params.id);
+  async update({ request, params, response }) {
+    const {
+      description, datetimeStart, datetimeEnd = null, userId,
+    } = request.all();
+
+    const task = await Task.find(params.id);
+
+    if (!task) {
+      return error({ response, code: NOT_FOUND, error: TASK_NOT_FOUND });
+    }
+
+    if (datetimeEnd) {
+      if (moment(datetimeEnd).isBefore(datetimeStart)) {
+        return error({ response, error: TASK_DATETIME_END_BEFORE_START });
+      }
+    }
+
+    task.merge({
+      description, datetimeStart, datetimeEnd, userId,
+    });
+
+    await task.save();
+
+    return Task.find(params.id);
+  }
+
+  async destroy({ params, response }) {
+    const task = await Task.find(params.id);
+
+    if (!task) {
+      return error({ response, code: NOT_FOUND, error: TASK_NOT_FOUND });
+    }
 
     return task.delete();
   }

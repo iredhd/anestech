@@ -10,7 +10,7 @@ import moment from 'moment';
 import {
   Section, Template, Button, LoadingWrapper,
 } from '../../components';
-import { Task as TaskService } from '../../services';
+import { Notify, Task as TaskService } from '../../services';
 import { DATETIME_FORMAT } from '../../constants/format';
 import { DeleteModal } from './components';
 
@@ -27,6 +27,7 @@ const Task = () => {
     if (success) {
       setTask(body);
     } else {
+      Notify.error(body);
       setTask({ });
     }
 
@@ -52,15 +53,15 @@ const Task = () => {
             </Grid>
             <Grid item xs={12} sm={4}>
               <Typography variant="subtitle2">Início:</Typography>
-              <Typography variant="body1">{moment(task.datetimeStart).format(DATETIME_FORMAT)}</Typography>
+              <Typography variant="body1">{task.datetimeStart && moment(task.datetimeStart).isValid() ? moment(task.datetimeStart).format(DATETIME_FORMAT) : '-'}</Typography>
             </Grid>
             <Grid item xs={12} sm={4}>
               <Typography variant="subtitle2">Término:</Typography>
-              <Typography variant="body1">{task.datetimeEnd ? moment(task.datetimeEnd).format(DATETIME_FORMAT) : '-'}</Typography>
+              <Typography variant="body1">{task.datetimeEnd && moment(task.datetimeEnd).isValid() ? moment(task.datetimeEnd).format(DATETIME_FORMAT) : '-'}</Typography>
             </Grid>
             <Grid item xs={12}>
               <Typography variant="subtitle2">Descrição:</Typography>
-              <Typography variant="body1">{task.description}</Typography>
+              <Typography variant="body1">{get(task, 'description', '-')}</Typography>
             </Grid>
             <Grid item xs={12}>
               <Grid container spacing={2} justify="flex-end" direction="row">

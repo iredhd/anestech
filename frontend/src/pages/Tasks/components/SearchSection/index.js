@@ -14,7 +14,7 @@ import {
   Input, Section, Button, Autocomplete, DatePicker,
 } from '../../../../components';
 import useStyles from './styles';
-import { User } from '../../../../services';
+import { Notify, User } from '../../../../services';
 
 const SearchSection = ({ onSubmit }) => {
   const classes = useStyles();
@@ -65,6 +65,8 @@ const SearchSection = ({ onSubmit }) => {
         })),
       });
     } else {
+      Notify.error(body);
+
       setUsers({
         options: [],
         debounce: null,

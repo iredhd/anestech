@@ -5,7 +5,7 @@ class TaskSchema extends Schema {
   up() {
     this.create('tasks', (table) => {
       table.increments();
-      table.string('description').notNullable();
+      table.text('description', 'longtext').notNullable();
       table
         .integer('userId')
         .unsigned()
@@ -15,7 +15,7 @@ class TaskSchema extends Schema {
         .onDelete('CASCADE')
         .notNullable();
       table.datetime('datetimeStart').notNullable();
-      table.datetime('datetimeEnd').notNullable();
+      table.datetime('datetimeEnd');
       table.timestamps();
     });
   }

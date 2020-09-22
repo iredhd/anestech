@@ -2,7 +2,7 @@ class StoreUser {
   get rules() {
     return {
       name: 'required',
-      email: 'required|email|unique:users',
+      email: 'required|email',
       password: 'required',
     };
   }

@@ -1,11 +1,17 @@
 const User = use('App/Models/User');
 const Database = use('Database');
-const { BAD_REQUEST } = use('http-status-codes');
 const { USER_UPDATE_NOT_ALLOWED, USER_EMAIL_ALREADY_IN_USE, USER_DELETE_NOT_ALLOWED } = use('App/Constants/Errors');
+const { error } = use('App/Helpers/Responses');
 
 class UserController {
-  async store({ request }) {
+  async store({ request, response }) {
     const data = request.only(['name', 'email', 'password']);
+
+    const userExists = await User.findBy('email', data.email);
+
+    if (userExists) {
+      return error({ response, error: USER_EMAIL_ALREADY_IN_USE });
+    }
 
     const user = await User.create(data);
 
@@ -40,7 +46,7 @@ class UserController {
     const { password, ...data } = request.only(['name', 'email', 'password']);
 
     if (Number(auth.user.id) !== Number(params.id)) {
-      return response.status(BAD_REQUEST).send({ error: USER_UPDATE_NOT_ALLOWED });
+      return error({ response, error: USER_UPDATE_NOT_ALLOWED });
     }
 
     const diferentUser = await User
@@ -50,7 +56,7 @@ class UserController {
       .first();
 
     if (diferentUser) {
-      return response.status(BAD_REQUEST).send({ error: USER_EMAIL_ALREADY_IN_USE });
+      return error({ response, error: USER_EMAIL_ALREADY_IN_USE });
     }
 
     const user = await User.findOrFail(params.id);
@@ -68,7 +74,7 @@ class UserController {
 
   async destroy({ params, response, auth }) {
     if (Number(auth.user.id) !== Number(params.id)) {
-      return response.status(BAD_REQUEST).send({ error: USER_DELETE_NOT_ALLOWED });
+      return error({ response, error: USER_DELETE_NOT_ALLOWED });
     }
 
     const user = await User.findOrFail(params.id);

@@ -3,15 +3,20 @@ import { useParams, useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import { Modal } from '../../../../components';
-import { Task } from '../../../../services';
+import { Notify, Task } from '../../../../services';
 
 const DeleteModal = ({ open, onClose }) => {
   const { id } = useParams();
   const history = useHistory();
 
   const handleDelete = useCallback(async () => {
-    await Task.delete(id);
-    history.push('/tarefas');
+    const { success, body } = await Task.delete(id);
+
+    if (success) {
+      history.push('/tarefas');
+    } else {
+      Notify.error(body);
+    }
   }, [id]);
 
   return (
