@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  TableBody, TableRow, TableCell, TableHead, IconButton, Table,
+  TableBody, TableRow, TableCell, TableHead, IconButton, Table, Hidden,
 } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import moment from 'moment';
@@ -33,14 +33,16 @@ const ListSection = ({
         </Link>
       </div>
       <LoadingWrapper isLoading={isLoading}>
-        <Table className={classes.table}>
+        <Table>
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
               <TableCell>Nome</TableCell>
-              <TableCell>E-mail</TableCell>
-              <TableCell>Cadastrado em:</TableCell>
-              <TableCell>Última atualização:</TableCell>
+              <Hidden smDown>
+                <TableCell>E-mail</TableCell>
+                <TableCell>Cadastrado em:</TableCell>
+                <TableCell>Última atualização:</TableCell>
+              </Hidden>
               <TableCell align="right">Detalhes</TableCell>
             </TableRow>
           </TableHead>
@@ -52,9 +54,12 @@ const ListSection = ({
                     {row.id}
                   </TableCell>
                   <TableCell>{row.name}</TableCell>
-                  <TableCell>{row.email}</TableCell>
-                  <TableCell>{moment(row.created_at).format(DATETIME_FORMAT)}</TableCell>
-                  <TableCell>{moment(row.updated_at).format(DATETIME_FORMAT)}</TableCell>
+                  <Hidden smDown>
+                    <TableCell>{row.email}</TableCell>
+                    <TableCell>{moment(row.created_at).format(DATETIME_FORMAT)}</TableCell>
+                    <TableCell>{moment(row.updated_at).format(DATETIME_FORMAT)}</TableCell>
+
+                  </Hidden>
                   <TableCell align="right">
                     <Link to={`/usuarios/ver/${row.id}`}>
                       <IconButton size="small">
