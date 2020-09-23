@@ -69,7 +69,6 @@ cp .env.example .env
 npm install
 docker-compose up
 ```
-Now access http://localhost
 
 ## Configuration
 Please, before executing `docker-compose up`, fill in the environment variables inside the `.env` files.
