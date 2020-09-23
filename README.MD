@@ -1,5 +1,5 @@
 <h1 align="center">
-  <a href="https://anestech.iredhd.dev">
+  <a href="https://anestech.vercel.app">
     <img alt="Anestech" src="https://res.cloudinary.com/iredhd/image/upload/v1600820150/anestech/logo.png" width=300 />
   </a>
 </h1>
@@ -23,7 +23,7 @@
 
 The application consists of a task managment system with two simple CRUDs: tasks and users.
 
-To test the project already configured and running [click here.](https://anestech.iredhd.dev)
+To test the project already configured and running [click here.](https://anestech.vercel.app)
 
 <img alt="Login Image" src="https://res.cloudinary.com/iredhd/image/upload/v1600820180/anestech/home.png"/>
 
