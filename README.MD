@@ -60,6 +60,7 @@ cd backend
 cp .env.example .env
 npm install
 docker-compose up
+docker exec -it anestech_api npm run db:migrate
 ```
 ### Frontend
 ```
